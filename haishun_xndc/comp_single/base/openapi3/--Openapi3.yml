@@ -1,0 +1,294 @@
+openapi: 3.0.0
+info:
+  title: {{ rootInfo.displayName }}API
+  version: 1.0.0
+  description: {{ rootInfo.displayName }}API
+servers:
+  - url: http://127.0.0.1:8086/api
+paths:
+  /{{ rootInfo.camelCaseName }}/add:
+    post:
+      summary: 添加{{ rootInfo.displayName }}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/{{ rootInfo.className }}Request'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/{{ rootInfo.className }}VO'
+        '500':
+          description: 系统异常
+  /{{ rootInfo.camelCaseName }}/update:
+    post:
+      summary: 更新{{ rootInfo.displayName }}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/{{ rootInfo.className }}Request'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/{{ rootInfo.className }}VO'
+        '500':
+          description: 系统异常
+  /{{ rootInfo.camelCaseName }}/remove:
+    post:
+      summary: 删除{{ rootInfo.displayName }}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/{{ rootInfo.className }}Request'
+      responses:
+        '204':
+          description: 成功
+        '500':
+          description: 系统异常
+  /{{ rootInfo.camelCaseName }}/view/{id}:
+    post:
+      summary: 根据id查询{{ rootInfo.displayName }}
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/{{ rootInfo.className }}VO'
+        '500':
+          description: 系统异常
+  /{{ rootInfo.camelCaseName }}/aq:
+    post:
+      summary: 根据高级条件查询{{ rootInfo.displayName }}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AqCondition'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/{{ rootInfo.className }}VO'
+        '500':
+          description: 系统异常
+  /{{ rootInfo.camelCaseName }}/aqPage:
+    post:
+      summary: 根据高级条件分页查询{{ rootInfo.displayName }}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AqPageInfoInput'
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagedList'
+        '500':
+          description: 系统异常
+components:
+  schemas:
+    {{ rootInfo.className }}Request:
+      type: object
+      properties:
+        {{ rootInfo.pkAttributeInfo.camelCaseName }}:
+          type: integer
+          description: {{ rootInfo.pkAttributeInfo.displayName }}
+{%- for attributeInfo in rootInfo.baseAttributeInfoList %}
+        {{ attributeInfo.attributeName }}:
+          type: {{ attributeInfo.ext2 }}
+          description: {{ attributeInfo.displayName }}
+  {%- if attributeInfo.enumInfo %}
+          enum:
+    {%- for enumAttributeInfo in attributeInfo.enumInfo.enumAttributeInfoList %}
+          - {{ enumAttributeInfo.enumValue }}
+    {%- endfor %}
+  {%- endif %}
+{%- endfor %}
+{%- for attributeInfo in rootInfo.fkAttributeInfoList %}
+        {{ attributeInfo.attributeName }}:
+          type: integer
+          description: {{ attributeInfo.displayName }}
+{%- endfor %}
+{{ rootInfo.className }}VO:
+      type: object
+      properties:
+        {{ rootInfo.pkAttributeInfo.camelCaseName }}:
+          type: integer
+          description: {{ rootInfo.pkAttributeInfo.displayName }}
+{%- for attributeInfo in rootInfo.baseAttributeInfoList %}
+        {{ attributeInfo.attributeName }}:
+          type: {{ attributeInfo.ext2 }}
+          description: {{ attributeInfo.displayName }}
+  {%- if attributeInfo.enumInfo %}
+          enum:
+    {%- for enumAttributeInfo in attributeInfo.enumInfo.enumAttributeInfoList %}
+          - {{ enumAttributeInfo.enumValue }}
+    {%- endfor %}
+  {%- endif %}
+{%- endfor %}
+{%- for attributeInfo in rootInfo.fkAttributeInfoList %}
+        {{ attributeInfo.attributeName }}:
+          type: integer
+          description: {{ attributeInfo.displayName }}
+{%- endfor %}
+{%- for attributeInfo in rootInfo.upAttributeInfoList %}
+        {{ attributeInfo.attributeName }}:
+          $ref: '#/components/schemas/{{ attributeInfo.outEntityInfo.className }}VO'
+{%- endfor %}
+{%- for attributeInfo in rootInfo.upSingleAttributeInfoList %}
+        {{ attributeInfo.attributeName }}:
+          $ref: '#/components/schemas/{{ attributeInfo.outEntityInfo.className }}VO'
+{%- endfor %}
+{%- for entityInfo in rootInfo.compInfo.upEntityInfoList %}
+    {{ entityInfo.className }}VO:
+      type: object
+      description: {{ entityInfo.displayName }}
+      properties:
+  {%- for attributeInfo in entityInfo.baseAttributeInfoList %}
+        {{ attributeInfo.camelCaseName }}:
+          type: {{ attributeInfo.ext2 }}
+          description: {{ attributeInfo.displayName }}
+    {%- if attributeInfo.enumInfo %}
+          enum:
+      {%- for enumAttributeInfo in attributeInfo.enumInfo.enumAttributeInfoList %}
+          - {{ enumAttributeInfo.enumValue }}
+      {%- endfor %}
+    {%- endif %}
+  {%- endfor %}
+  {%- for attributeInfo in entityInfo.fkAttributeInfoList %}
+        {{ attributeInfo.camelCaseName }}:
+          type: integer
+          description: {{ attributeInfo.displayName }}
+  {%- endfor %}
+        {{ entityInfo.pkAttributeInfo.camelCaseName }}:
+          type: integer
+          description: "{{ entityInfo.pkAttributeInfo.displayName }}"
+{%- endfor %}
+    AqCondition:
+      type: object
+      description: 高级查询条件
+      properties:
+        logicNode:
+          $ref: '#/components/schemas/AqLogicNode'
+          description: 逻辑节点
+        orders:
+          type: array
+          description: 排序条件列表
+          items:
+            $ref: '#/components/schemas/AqOrder'
+            description: 排序条件
+    AqLogicNode:
+      type: object
+      description: 逻辑节点
+      properties:
+        logicOperatorCode:
+          type: string
+          description: 逻辑操作符
+          enum: [ and, or ]
+        filterNodes:
+          type: array
+          description: 过滤节点列表
+          items:
+            $ref: '#/components/schemas/AqFilterNode'
+            description: 过滤节点
+        logicNode:
+          $ref: '#/components/schemas/AqLogicNode'
+          description: 子逻辑节点
+    AqFilterNode:
+      type: object
+      description: 过滤节点
+      properties:
+        name:
+          type: string
+          description: 查询条件名称
+        operatorCode:
+          type: string
+          description: 比较操作符编码
+          enum: [ equal , notEqual, lessThan, greaterThan, lessThanOrEqual, greaterThanOrEqual, like, likeLeft, likeRight, in, notIn, between, isNull, notNull ]
+        filterParams:
+          type: array
+          items:
+            type: object
+            description: 参数
+          description: 查询参数
+    AqOrder:
+      type: object
+      description: 排序条件
+      properties:
+        field:
+          property: string
+          description: 排序属性
+        direction:
+          type: string
+          description: 排序方向
+          enum: [ asc, desc ]
+    AqPageInfoInput:
+      type: object
+      description: 分页查询条件
+      allOf:
+        - $ref: '#/components/schemas/PagedCriteria'
+        - type: object
+          properties:
+            logicNode:
+              $ref: '#/components/schemas/AqLogicNode'
+              description: 逻辑节点
+            orders:
+              type: array
+              description: 排序条件
+              items:
+                $ref: '#/components/schemas/AqOrder'
+    PagedCriteria:
+      type: object
+      description: 分页查询条件
+      properties:
+        page:
+          type: integer
+          description: 当前页数（从1开始）
+        pageSize:
+          type: integer
+          description: 每页的数量
+    PagedList:
+      type: object
+      description: 分页结果
+      properties:
+        page:
+          type: integer
+          description: 当前页数（从1开始）
+        pageSize:
+          type: integer
+          description: 每页的数量
+        total:
+          type: integer
+          description: 总记录数
+        rows:
+          type: array
+          description: 返回的记录列表
+          items:
+            $ref: '#/components/schemas/{{ rootInfo.className }}VO'
