@@ -5,7 +5,7 @@ import com.haishun.kyy.xndc.up.advanquery.AqCondition;
 import com.haishun.kyy.xndc.up.advanquery.AqPageInfoInput;
 import com.haishun.kyy.xndc.up.db.domain.{{ rootInfo.className }};
 import com.haishun.kyy.xndc.up.dto.request.{{ rootInfo.className }}Request;
-import com.haishun.kyy.xndc.up.dto.vo.{{ rootInfo.className }}.{{ rootInfo.className }}VO;
+import com.haishun.kyy.xndc.up.dto.vo.{{ rootInfo.className | lower }}.{{ rootInfo.className }}VO;
 
 import java.util.List;
 

@@ -1,8 +1,8 @@
 {%- if not rootInfo.fgMain %}
-package {{ rootInfo.mainEntityInfo.basePath }}.{{ rootInfo.mainEntityInfo.packageName }}.dto.vo.{{ upAttributeInfo.outEntityInfo.className}};
+package {{ rootInfo.mainEntityInfo.basePath }}.{{ rootInfo.mainEntityInfo.packageName }}.dto.vo.{{ rootInfo.mainEntityInfo.className | lower }};
 {%- endif %}
 {%- if rootInfo.fgMain %}
-package {{ rootInfo.basePath }}.{{ rootInfo.packageName}}.dto.vo.{{ upAttributeInfo.outEntityInfo.className}};
+package {{ rootInfo.basePath }}.{{ rootInfo.packageName }}.dto.vo.{{ rootInfo.className | lower }};
 {%- endif %}
 
 import java.util.List;

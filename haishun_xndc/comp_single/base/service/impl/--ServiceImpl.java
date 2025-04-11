@@ -11,7 +11,7 @@ import com.haishun.kyy.xndc.up.db.dao.{{ rootInfo.className }}Dao;
 import com.haishun.kyy.xndc.up.db.domain.{{ rootInfo.className }};
 import com.haishun.kyy.xndc.up.db.query.Q{{ rootInfo.className }};
 import com.haishun.kyy.xndc.up.dto.request.{{ rootInfo.className }}Request;
-import com.haishun.kyy.xndc.up.dto.vo.{{ rootInfo.className }}.{{ rootInfo.className }}VO;
+import com.haishun.kyy.xndc.up.dto.vo.{{ rootInfo.className | lower }}.{{ rootInfo.className }}VO;
 import com.haishun.kyy.xndc.up.service.{{ rootInfo.className }}Service;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;

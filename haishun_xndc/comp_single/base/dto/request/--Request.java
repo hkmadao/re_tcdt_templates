@@ -2,14 +2,14 @@
 package {{ rootInfo.mainEntityInfo.basePath }}.{{ rootInfo.mainEntityInfo.packageName }}.dto.request;
 {%- endif %}
 {%- if rootInfo.fgMain %}
-package {{ rootInfo.basePath }}.{{ rootInfo.packageName}}.dto.request;
+package {{ rootInfo.basePath }}.{{ rootInfo.packageName }}.dto.request;
 {%- endif %}
 
 import java.util.List;
 import java.math.BigDecimal;
 {%- for upAttributeInfo in rootInfo.upAttributeInfoList %}
     {%- if upAttributeInfo.camelCaseName is matching("createUser") %}
-import {{ upAttributeInfo.outEntityInfo.basePath }}.{{ upAttributeInfo.outEntityInfo.packageName}}.dto.request.{{ upAttributeInfo.outEntityInfo.className}}Request;
+import {{ upAttributeInfo.outEntityInfo.basePath }}.{{ upAttributeInfo.outEntityInfo.packageName }}.dto.request.{{ upAttributeInfo.outEntityInfo.className }}Request;
     {%- endif %}
 {%- endfor %}
 {%- for outBasePackage in rootInfo.outBasePackageList %}
