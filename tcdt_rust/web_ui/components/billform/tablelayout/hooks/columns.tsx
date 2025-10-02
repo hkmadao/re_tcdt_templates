@@ -200,11 +200,18 @@ export const useMainTableColumns: () => TableColumnType<T{{ ht.tabClassName }}>[
               '{{ b.name }}',
               billformConf!,
             );
-            if (refConf) {
-              const refData = (record as any).{{ b.refAttributeName }};
-              if (refData) {
-                return refData[refConf.displayProp!];
+            if (refData) {
+              let displayValue = refData;
+              if (refConf.displayProp?.indexOf(".")) {
+                refConf.displayProp.split(".").forEach(prop => {
+                  if (displayValue && typeof displayValue === "object") {
+                    displayValue = displayValue[prop];
+                  }
+                })
+              } else {
+                displayValue = refData[refConf.displayProp!];
               }
+              return displayValue;
             }
           },
         },
@@ -405,11 +412,18 @@ export const use{{ bt.firstUpperTabCode }}Columns: () => TableColumnType<T{{ bt.
               '{{ b.name }}',
               billformConf!,
             );
-            if (refConf) {
-              const refData = (record as any).{{ b.refAttributeName }};
-              if (refData) {
-                return refData[refConf.displayProp!];
+            if (refData) {
+              let displayValue = refData;
+              if (refConf.displayProp?.indexOf(".")) {
+                refConf.displayProp.split(".").forEach(prop => {
+                  if (displayValue && typeof displayValue === "object") {
+                    displayValue = displayValue[prop];
+                  }
+                })
+              } else {
+                displayValue = refData[refConf.displayProp!];
               }
+              return displayValue;
             }
           },
         },
